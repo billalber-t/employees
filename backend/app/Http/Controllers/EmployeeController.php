@@ -10,10 +10,11 @@ class EmployeeController extends Controller
 {
     public function index()
     {
+
         $employees = Employee::all();
         return response([
             'message' => 'Employees found!',
-            'data' => Employee::collection($employees)
+            'data' => EmployeeResource::collection($employees)
         ]);
     }
 
@@ -28,10 +29,10 @@ class EmployeeController extends Controller
         $data = $request->validate([
             'f_name' => 'required|string',
             'l_name' => 'required|string',
-            'other_name' => 'required|string',
+            'other_name' => 'nullable|string',
             'email' => 'required|string|email|unique:employees,email',
             'mobile_contact' => 'required|numeric',
-            'home_contact' => 'required|numeric',
+            'home_contact' => 'nullable|numeric',
             'dob' => 'required|date',
             'joining_date' => 'required|date',
             'next_of_kin' => 'required|string',
@@ -86,19 +87,21 @@ class EmployeeController extends Controller
         $data = $request->validate([
             'f_name' => 'required|string',
             'l_name' => 'required|string',
-            'other_name' => 'required|string',
-            'email' => 'required|string|email|unique:employees,email',
+            'other_name' => 'nullable|string',
+            'email' => 'required|email|unique:employees,email,' . $id,
             'mobile_contact' => 'required|numeric',
-            'home_contact' => 'required|numeric',
+            'home_contact' => 'nullable|numeric',
             'dob' => 'required|date',
             'joining_date' => 'required|date',
             'next_of_kin' => 'required|string',
             'next_of_kin_contact' => 'required|string'
         ]);
 
+
         $employee = Employee::findOrFail($id);
 
-        $employee = $employee->update([
+
+        $employee->update([
             'f_name' => $data['f_name'],
             'l_name' => $data['l_name'],
             'other_name' => $data['other_name'],
@@ -113,7 +116,7 @@ class EmployeeController extends Controller
 
         return response([
             'message' => 'Employee updated successfully!',
-            'data' => Employee::collection($employee)
+            'data' => new EmployeeResource($employee)
         ]);
     }
 

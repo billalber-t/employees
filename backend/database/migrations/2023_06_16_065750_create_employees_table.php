@@ -19,12 +19,12 @@ class CreateEmployeesTable extends Migration
             $table->id();
             $table->string('f_name');
             $table->string('l_name');
-            $table->string('other_name');
+            $table->string('other_name')->nullable();
             $table->date('dob');
             $table->date('joining_date');
             $table->string('email');
             $table->string('mobile_contact');
-            $table->string('home_contact');
+            $table->string('home_contact')->nullable();
             $table->string('next_of_kin');
             $table->string('next_of_kin_contact');
             $table->timestamps();
